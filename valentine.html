@@ -1,0 +1,682 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>💌 Propuesta de San Valentín</title>
+  <style>
+    :root{
+      --bg1:#ffd6e7;
+      --bg2:#ffe6f1;
+      --bg3:#ffd1dc;
+      --paper:#fff7ef;
+      --ink:#4a3b36;
+      --rose:#e11d48;
+      --rose2:#fb7185;
+      --shadow: 0 18px 40px rgba(0,0,0,.16);
+      --radius: 24px;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, "Apple Color Emoji","Segoe UI Emoji";
+      color:var(--ink);
+      background: radial-gradient(1200px 800px at 20% 10%, var(--bg2), transparent 60%),
+                  radial-gradient(900px 700px at 80% 20%, var(--bg3), transparent 55%),
+                  linear-gradient(135deg, var(--bg1), var(--bg2));
+      overflow-x:hidden;
+    }
+    .wrap{
+      min-height:100%;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:24px;
+      position:relative;
+    }
+
+    /* Floating hearts layer */
+    .hearts{
+      position:fixed;
+      inset:0;
+      pointer-events:none;
+      overflow:hidden;
+      z-index:0;
+    }
+    .heart{
+      position:absolute;
+      bottom:-50px;
+      font-size:24px;
+      opacity:.8;
+      animation: floatUp linear infinite;
+      filter: drop-shadow(0 8px 10px rgba(0,0,0,.12));
+      user-select:none;
+    }
+    @keyframes floatUp{
+      from{ transform: translateY(0) translateX(0) rotate(0deg); }
+      to{ transform: translateY(-120vh) translateX(var(--drift, 0px)) rotate(var(--rot, 0deg)); }
+    }
+
+    /* Cards */
+    .card{
+      width:min(820px, 100%);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      background: rgba(255,255,255,.72);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      position:relative;
+      z-index:2;
+      overflow:hidden;
+    }
+    .pad{ padding:28px; }
+    .center{ text-align:center; }
+
+    .title{
+      font-family: ui-serif, Georgia, "Times New Roman", serif;
+      font-style:italic;
+      font-size: clamp(28px, 3.6vw, 44px);
+      color:#9f1239;
+      margin:0 0 8px;
+    }
+    .subtitle{
+      margin:0;
+      font-family: ui-serif, Georgia, "Times New Roman", serif;
+      font-style:italic;
+      color:#be123c;
+      opacity:.9;
+    }
+
+    /* Envelope */
+    .envelopeWrap{
+      display:grid;
+      place-items:center;
+      padding:42px 18px 52px;
+    }
+    .hint{
+      margin-top:16px;
+      font-family: ui-serif, Georgia, "Times New Roman", serif;
+      font-style:italic;
+      color:#be123c;
+    }
+    .envelopeBtn{
+      border:0;
+      background:transparent;
+      cursor:pointer;
+      padding:0;
+    }
+    .envelope{
+      width:min(360px, 92vw);
+      height:220px;
+      border-radius:22px;
+      background:#d9b99a;
+      box-shadow: 0 16px 30px rgba(0,0,0,.18);
+      position:relative;
+      overflow:hidden;
+      transform: translateZ(0);
+    }
+    .envFlap{
+      position:absolute;
+      left:50%;
+      top:18px;
+      width:260px;
+      height:260px;
+      background:#caa988;
+      transform: translateX(-50%) rotate(45deg);
+      clip-path: polygon(0 0, 100% 0, 50% 50%);
+      opacity:.95;
+    }
+    .seal{
+      position:absolute;
+      left:50%;
+      top:72px;
+      transform:translateX(-50%);
+      width:64px;
+      height:64px;
+      border-radius:999px;
+      display:grid;
+      place-items:center;
+      background: linear-gradient(135deg, #fb7185, #e11d48);
+      color:white;
+      box-shadow: 0 12px 18px rgba(0,0,0,.18);
+      font-size:26px;
+    }
+    .envText{
+      position:absolute;
+      left:0; right:0;
+      bottom:18px;
+      text-align:center;
+      font-family: ui-serif, Georgia, "Times New Roman", serif;
+      font-style:italic;
+      font-size:22px;
+      color:#9f1239;
+    }
+    .envelopeBtn:hover .envelope{ transform: scale(1.02); }
+    .envelopeBtn:active .envelope{ transform: scale(.99); }
+
+    /* Letter view */
+    .letter{
+      background: rgba(255,247,239,.92);
+      border-radius:var(--radius);
+    }
+    .scroll{
+      max-height: 70vh;
+      overflow:auto;
+      padding-right:10px;
+    }
+    .scroll::-webkit-scrollbar{ width:10px; }
+    .scroll::-webkit-scrollbar-thumb{ background: rgba(225,29,72,.25); border-radius:999px; }
+    .paper{
+      background: rgba(255,255,255,.75);
+      border-radius:18px;
+      padding:14px;
+      box-shadow: 0 12px 20px rgba(0,0,0,.10);
+    }
+    .photo{
+      border-radius:14px;
+      aspect-ratio: 1 / 1;
+      width:100%;
+      display:grid;
+      place-items:center;
+      background: #e5e7eb;
+      color:#6b7280;
+      font-size:14px;
+      text-align:center;
+      padding:8px;
+    }
+    .grid2{
+      display:grid;
+      gap:16px;
+      grid-template-columns: 1fr;
+    }
+    @media (min-width: 760px){
+      .grid2{ grid-template-columns: 1fr 1fr; }
+    }
+    .p{
+      font-family: ui-serif, Georgia, "Times New Roman", serif;
+      font-style:italic;
+      line-height:1.75;
+      font-size: 18px;
+      color:#51413b;
+      margin: 0 0 16px;
+    }
+    .sign{
+      margin-top:22px;
+      text-align:right;
+      font-family: ui-serif, Georgia, "Times New Roman", serif;
+      font-style:italic;
+      color:#51413b;
+    }
+
+    /* Buttons */
+    .btnRow{
+      margin-top:18px;
+      display:flex;
+      gap:12px;
+      justify-content:center;
+      flex-wrap:wrap;
+    }
+    .btn{
+      border:0;
+      cursor:pointer;
+      border-radius:999px;
+      padding:14px 20px;
+      font-family: ui-serif, Georgia, "Times New Roman", serif;
+      font-style:italic;
+      font-size:18px;
+      box-shadow: 0 12px 18px rgba(0,0,0,.12);
+      transition: transform .12s ease, background .12s ease;
+    }
+    .btn:active{ transform: scale(.98); }
+    .btnPrimary{
+      background: linear-gradient(135deg, #fb7185, #e11d48);
+      color:white;
+    }
+    .btnPrimary:hover{ filter:brightness(1.03); transform: scale(1.02); }
+    .btnGhost{
+      background: rgba(255,255,255,.85);
+      color:#44403c;
+    }
+    .btnGhost:hover{ background: rgba(255,255,255,.95); transform: scale(1.01); }
+
+    /* Proposal */
+    .bigHeart{
+      width:86px;height:86px;border-radius:999px;
+      display:grid; place-items:center;
+      background: rgba(251,113,133,.18);
+      margin:0 auto 16px;
+      font-size:42px;
+    }
+    .noMsg{
+      margin-top:10px;
+      font-family: ui-serif, Georgia, "Times New Roman", serif;
+      font-style:italic;
+      color:#6b7280;
+      font-size:18px;
+    }
+
+    /* Yes view */
+    .qrBox{
+      display:inline-block;
+      background:white;
+      border-radius:18px;
+      padding:14px;
+      box-shadow: 0 12px 18px rgba(0,0,0,.12);
+      margin-top:18px;
+    }
+    canvas{ border-radius:12px; }
+    .tiny{
+      margin-top:10px;
+      font-size:12px;
+      color:#6b7280;
+      word-break:break-all;
+    }
+
+    /* Hidden screens */
+    .hidden{ display:none; }
+
+    /* Confetti hearts */
+    .burst{
+      position:fixed;
+      inset:0;
+      pointer-events:none;
+      z-index:5;
+    }
+    .burst span{
+      position:absolute;
+      font-size:26px;
+      animation: pop 1.15s ease-out forwards;
+      filter: drop-shadow(0 10px 10px rgba(0,0,0,.18));
+    }
+    @keyframes pop{
+      0%{ transform: translate(-50%,-50%) scale(.4); opacity:0; }
+      15%{ opacity:1; }
+      100%{ transform: translate(var(--x), var(--y)) scale(1.1); opacity:0; }
+    }
+
+    /* Top small action */
+    .topRight{
+      position:fixed;
+      top:18px;
+      right:18px;
+      z-index:10;
+      display:flex;
+      gap:10px;
+    }
+    .miniBtn{
+      width:44px;height:44px;border-radius:999px;
+      border:0; cursor:pointer;
+      background: rgba(255,255,255,.75);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      box-shadow: 0 10px 18px rgba(0,0,0,.12);
+      font-size:18px;
+    }
+    .miniBtn:hover{ background: rgba(255,255,255,.92); }
+
+        /* Floating / leaf-like sway animation for photos */
+    @keyframes leafSway {
+      0% {
+        transform: rotate(-1.2deg) translateY(0px);
+      }
+      50% {
+        transform: rotate(1.2deg) translateY(-4px);
+      }
+      100% {
+        transform: rotate(-1.2deg) translateY(0px);
+      }
+    }
+
+    .photo.sway {
+      animation: leafSway 6s ease-in-out infinite;
+      transform-origin: center top;
+    }
+
+    .photo.sway.delay-1 { animation-delay: 0s; }
+    .photo.sway.delay-2 { animation-delay: 1.5s; }
+    .photo.sway.delay-3 { animation-delay: 3s; }
+
+    .envelope.open .envFlap {
+  animation: openFlap 0.8s ease forwards;
+    }
+  </style>
+</head>
+<body>
+  <!-- Floating hearts background -->
+  <div class="hearts" id="heartsLayer"></div>
+
+  <!-- Optional controls (no audio here, pero lo dejo por si quieres luego) -->
+  <div class="topRight">
+    <button class="miniBtn" id="toggleHearts" title="Corazones">❤️</button>
+  </div>
+
+  <div class="wrap">
+    <!-- SCREEN 1: Envelope -->
+    <section class="card" id="screenEnvelope">
+      <div class="envelopeWrap">
+        <h1 class="title">Tienes una carta especial... 💗</h1>
+        <p class="subtitle">Tócala para abrirla</p>
+
+        <div style="height:18px"></div>
+
+        <button class="envelopeBtn" id="openEnvelope" aria-label="Abrir carta">
+          <div class="envelope">
+            <div class="envFlap"></div>
+            <div class="seal">🤍</div>
+            <div class="envText">Para: Mi Mafecita bella</div>
+          </div>
+        </button>
+
+        <div class="hint">El 22 de Noviembre 2025 fue el inicio de algo hermoso ✨</div>
+      </div>
+    </section>
+
+    <!-- SCREEN 2: Letter -->
+    <section class="card hidden" id="screenLetter">
+      <div class="pad letter">
+        <h2 class="title center">Mi nutria hermosa 🦦...</h2>
+        <p class="subtitle center">Esto es para ti, con todo mi corazón 💕</p>
+
+        <div style="height:16px"></div>
+
+        <div class="scroll" id="letterScroll">
+          <!-- Main photo -->
+          <div class="paper" style="max-width:320px;margin:0 auto 16px;">
+            <div class="photo sway delay-1">
+              <img src="/first_date.jpg" 
+               style="
+                  max-width: 300px;
+                  width: 100%;
+                  height: auto;
+                  border-radius: 18px;
+                  object-fit: cover;
+                  display: block;
+                ">
+            </div>
+            <div class="subtitle center" style="margin-top:8px;">Nuestro primera cita 💘</div>
+          </div>
+
+          <p class="p">
+            Desde el primer momento en que te vi, sentí que algo cambió.
+            Gracias por brindarme paz, amor, felicidad.
+          </p>
+
+          <p class="p">
+            Me encanta cómo eres, cómo piensas, cómo me haces sentir.
+            Y desde que nos conocimos aquel <strong>Diciembre de 2024</strong>,
+            mi vida tiene más sentido contigo, la chica de mis sueños 🥰.
+          </p>
+
+          <p class="p">
+            Estoy muy agradecido de haberte conocido aquel Diciembre,
+            insistirte en el Junio pasado, que estemos aquí hoy juntos.
+            Eres mi persona favorita en el mundo entero.
+          </p>
+
+          <div class="grid2" style="margin-top:18px;">
+            <div class="paper">
+              <div class="photo sway delay-2">
+                <img src="/noviecita.jpg" 
+                style="
+                    max-width: 260px;
+                    width: 100%;
+                    height: auto;
+                    border-radius: 16px;
+                    object-fit: cover;
+                    display: block;
+                  ">
+              </div>
+              <div class="subtitle center" style="margin-top:8px;">Momentos contigo 🥰</div>
+            </div>
+            <div class="paper">
+              <div class="photo sway delay-3">
+                <img src="/feriecita.jpg" 
+                style="
+                    max-width: 260px;
+                    width: 100%;
+                    height: auto;
+                    border-radius: 16px;
+                    object-fit: cover;
+                    display: block;
+                  ">
+              </div>
+              <div class="subtitle center" style="margin-top:8px;">Mi persona favorita 💖</div>
+            </div>
+          </div>
+
+          <div style="height:18px"></div>
+
+          <p class="p">
+            Llevamos poco tiempo siendo novios, pero cada día que pasamos juntos me doy cuenta de lo afortunado que soy de tenerte a mi lado.
+            De la increíble chica de la cual me enamoré y espero sientas lo mismo, Osita linda, mi amorcito, mi todo 🥹.
+            Quiero hacerte saber que me haces muy feliz y que definitivamente nuestro amor vale la pena,
+            me haces sentir tan amado, cuidado, seguro. Somos una pareja extraordinaria y siempre velaré
+            por nuestro bienestar.
+          </p>
+
+          <p class="p">
+            Gracias por ser tú, tu personalidad, tu físico, tu forma de ser, tu risa, tus ocurrencias, tu apoyo incondicional, tu amor.
+             Eres la mejor novia, con quien quiero compartir todos y cada uno de mis días
+              y no puedo esperar a seguir construyendo nuestra historia juntos.
+          </p>
+
+          <p class="subtitle center"> Por eso dale  al botón continuar 🤭</p>
+
+          <div class="sign">
+            <div>Con todo mi amor, hoy y siempre...</div>
+            <div style="margin-top:10px; font-size:30px; color:#9f1239;">Jashito ❤️</div>
+          </div>
+
+          <div class="btnRow">
+            <button class="btn btnPrimary" id="goProposal">Continuar 💞</button>
+          </div>
+        </div>
+
+        <div class="btnRow" style="margin-top:18px;">
+          <button class="btn btnGhost" id="backToEnvelope">← Volver</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- SCREEN 3: Proposal -->
+    <section class="card hidden" id="screenProposal">
+      <div class="pad center">
+        <div class="bigHeart">❤️</div>
+        <h2 class="title">¿Quieres ser mi San Valentín?</h2>
+        <div style="font-size:28px; margin-top:6px;">💞</div>
+        <div class="noMsg" id="noMsg">Awww porfis 🥺</div>
+
+        <div class="btnRow" style="margin-top:22px;">
+          <button class="btn btnPrimary" id="btnYes">¡Sí, quiero! 💕</button>
+          <button class="btn btnGhost" id="btnNo">No... 😢</button>
+        </div>
+
+        <div class="btnRow" style="margin-top:18px;">
+          <button class="btn btnGhost" id="backToLetter">← Regresar a la carta</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- SCREEN 4: YES -->
+    <section class="card hidden" id="screenYes">
+      <div class="pad center">
+        <h2 class="title">¡SÍÍÍ! 💘💘💘</h2>
+        <p class="subtitle">Escanea el QR para nuestra canción ✨</p>
+
+        <div class="qrBox" id="qrBox"></div>
+
+        <div class="tiny" id="spotifyText"></div>
+
+        <div class="btnRow">
+          <a class="btn btnPrimary" id="openSpotify" href="#" target="_blank" rel="noopener">
+            Abrir canción 🎵
+          </a>
+          <button class="btn btnGhost" id="restart">Volver al inicio 💌</button>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <div class="burst" id="burst"></div>
+
+  <!-- QR generator (no libs): mini QR via external image API -->
+  <!-- Nota: si prefieres 100% offline, te puedo cambiar a un QR "dibujado", pero esto es lo más simple. -->
+  <script>
+    // ====== EDITA AQUÍ ======
+    const SPOTIFY_URL = "https://open.spotify.com/intl-es/track/1N0ESkYs2FH1e0kYSfuGWm?si=d675dbd98f454f78";
+    // ========================
+
+    // Screens
+    const screenEnvelope = document.getElementById("screenEnvelope");
+    const screenLetter   = document.getElementById("screenLetter");
+    const screenProposal = document.getElementById("screenProposal");
+    const screenYes      = document.getElementById("screenYes");
+
+    // Buttons
+    const openEnvelope   = document.getElementById("openEnvelope");
+    const goProposal     = document.getElementById("goProposal");
+    const backToEnvelope = document.getElementById("backToEnvelope");
+    const backToLetter   = document.getElementById("backToLetter");
+    const btnYes         = document.getElementById("btnYes");
+    const btnNo          = document.getElementById("btnNo");
+    const restart        = document.getElementById("restart");
+
+    // UI
+    const noMsgEl     = document.getElementById("noMsg");
+    const heartsLayer = document.getElementById("heartsLayer");
+    const burst       = document.getElementById("burst");
+    const qrBox       = document.getElementById("qrBox");
+    const spotifyText = document.getElementById("spotifyText");
+    const openSpotify = document.getElementById("openSpotify");
+    const toggleHearts= document.getElementById("toggleHearts");
+
+    let heartsEnabled = true;
+
+    function show(screen){
+      [screenEnvelope, screenLetter, screenProposal, screenYes].forEach(s => s.classList.add("hidden"));
+      screen.classList.remove("hidden");
+      window.scrollTo({top:0, behavior:"smooth"});
+    }
+
+    // Background hearts
+    function spawnHearts(count=12){
+      for(let i=0;i<count;i++){
+        const el = document.createElement("div");
+        el.className = "heart";
+        el.textContent = "❤️";
+        el.style.left = (5 + Math.random()*90) + "%";
+        el.style.fontSize = (16 + Math.random()*22) + "px";
+        el.style.opacity = (0.45 + Math.random()*0.45).toFixed(2);
+        el.style.animationDuration = (5 + Math.random()*7).toFixed(2) + "s";
+        el.style.animationDelay = (Math.random()*2.5).toFixed(2) + "s";
+        el.style.setProperty("--drift", ((Math.random()*90)-45).toFixed(0) + "px");
+        el.style.setProperty("--rot", ((Math.random()*50)-25).toFixed(0) + "deg");
+        heartsLayer.appendChild(el);
+      }
+    }
+    function clearHearts(){
+      heartsLayer.innerHTML = "";
+    }
+    function setHearts(on){
+      heartsEnabled = on;
+      if(on){
+        clearHearts();
+        spawnHearts(14);
+      }else{
+        clearHearts();
+      }
+    }
+
+    // Confetti hearts burst
+    function heartBurst(n=22){
+      burst.innerHTML = "";
+      const cx = window.innerWidth/2;
+      const cy = window.innerHeight/2;
+      for(let i=0;i<n;i++){
+        const s = document.createElement("span");
+        s.textContent = "💖";
+        const x = (Math.random()*window.innerWidth) + "px";
+        const y = (Math.random()*window.innerHeight) + "px";
+        s.style.left = cx + "px";
+        s.style.top  = cy + "px";
+        s.style.setProperty("--x", x);
+        s.style.setProperty("--y", y);
+        burst.appendChild(s);
+      }
+      setTimeout(()=> burst.innerHTML = "", 1400);
+    }
+
+    // No button logic
+    const NO_MESSAGES = [
+      "Awww porfis 🥺",
+      "Ándale… tú sabes que sí 💘",
+      "No seas así, mi amor 😭",
+      "Prometo darte muchos besitos 😚",
+      "Ok… último intento (mentira) 😏",
+      "Te hago tu comida favorita 👀",
+      "Por favorcitooooo 💕",
+    ];
+    let noCount = 0;
+
+    function updateNoUI(){
+      const idx = Math.min(noCount, NO_MESSAGES.length-1);
+      noMsgEl.textContent = NO_MESSAGES[idx];
+
+      // Make YES bigger and bigger
+      const scale = 1 + Math.min(noCount * 0.12, 1.2);
+      btnYes.style.transform = `scale(${scale})`;
+    }
+
+    // QR (simple): uses external endpoint to generate QR image
+    function renderQR(url){
+      const encoded = encodeURIComponent(url);
+      const img = document.createElement("img");
+      img.alt = "QR para la canción";
+      img.width = 220;
+      img.height = 220;
+      img.style.borderRadius = "12px";
+      img.src = `https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=${encoded}`;
+      qrBox.innerHTML = "";
+      qrBox.appendChild(img);
+
+      spotifyText.textContent = url;
+      openSpotify.href = url;
+    }
+
+    // Events
+    openEnvelope.addEventListener("click", () => show(screenLetter));
+    goProposal.addEventListener("click", () => show(screenProposal));
+    backToEnvelope.addEventListener("click", () => show(screenEnvelope));
+    backToLetter.addEventListener("click", () => show(screenLetter));
+
+    btnYes.addEventListener("click", () => {
+      show(screenYes);
+      heartBurst(28);
+      renderQR(SPOTIFY_URL);
+    });
+
+    btnNo.addEventListener("click", () => {
+      noCount++;
+      updateNoUI();
+    });
+
+    restart.addEventListener("click", () => {
+      noCount = 0;
+      btnYes.style.transform = "scale(1)";
+      noMsgEl.textContent = NO_MESSAGES[0];
+      show(screenEnvelope);
+      heartBurst(10);
+    });
+
+    toggleHearts.addEventListener("click", ()=>{
+      setHearts(!heartsEnabled);
+      toggleHearts.textContent = heartsEnabled ? "❤️" : "🤍";
+    });
+
+    // Init
+    setHearts(true);
+    show(screenEnvelope);
+  </script>
+</body>
+</html>
